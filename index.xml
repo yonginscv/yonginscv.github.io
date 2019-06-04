@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>용인 SCV</title>
+    <link>https://yonginscv.github.io/</link>
+    <description>Recent content on 용인 SCV</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Jun 2019 01:12:45 +0900</lastBuildDate>
+    
+	<atom:link href="https://yonginscv.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Spring Security</title>
+      <link>https://yonginscv.github.io/posts/springsecurity/</link>
+      <pubDate>Wed, 05 Jun 2019 01:12:45 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/springsecurity/</guid>
+      <description>Spring Security 개요 Spring Security 는 Servlet Filter를 이용하여 Service의 보안과 관련된 기능을 한곳에서 모아 처리하는 기능을 제공합니다.
+Filter 는 Java Servlet Specification에 정의된 HttpServletRequest가 Servlet까지 오기 전에 사전(후) 처리하는 방법입니다.
+Spring Security와 관련된 동작들은 기본적으로 이 Filter layer에서 모두 이루어집니다. 참고로 아래 그림은 Spring Security Architecture 의 그림을 보강한 것입니다.
+위 Spring Security 는 위와 같은 FilterChain은 아래와 같은 Java Configuration 형태로 만들 수 있도록 합니다. WebSecurityConfigurerAdapter 당 FilterChain 이 하나씩 만들어집니다.</description>
+    </item>
+    
+    <item>
+      <title>첫번째 포스트</title>
+      <link>https://yonginscv.github.io/posts/firstport/</link>
+      <pubDate>Tue, 04 Jun 2019 03:15:21 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/firstport/</guid>
+      <description> 블로그를 셋업하면서 Static Site Generator
+ Jekyll 보다는 익숙한 go 기반의 Hugo 사용  한글 폰트 변경
+ Google Fonts 에서 나눔 명조 추가  </description>
+    </item>
+    
+  </channel>
+</rss>
