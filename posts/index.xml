@@ -6,10 +6,22 @@
     <description>Recent content in Posts on 용인 SCV</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Jun 2019 01:12:45 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 08 Jun 2019 14:27:48 +0900</lastBuildDate>
     
 	<atom:link href="https://yonginscv.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Effective Toubleshooting</title>
+      <link>https://yonginscv.github.io/posts/effectivetoubleshooting/</link>
+      <pubDate>Sat, 08 Jun 2019 14:27:48 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/effectivetoubleshooting/</guid>
+      <description>DRAFT. 수정 중.
+서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과 공감이 가는 내용들이었습니다.
+이에 SRE 책의 Troubleshooting 과 관련된 내용을 정리하며 더불어 제 생각을 추가하는 형태로 글을 써보았습니다.
+참고로 SRE 책의 내용은 Google이 무료로 공개하였습니다. https://landing.google.com/sre/books/ 입니다. 또한 jpub출판사를 통해 번역본이 출판되어 있습니다.</description>
+    </item>
     
     <item>
       <title>Spring Security</title>
@@ -17,10 +29,11 @@
       <pubDate>Wed, 05 Jun 2019 01:12:45 +0900</pubDate>
       
       <guid>https://yonginscv.github.io/posts/springsecurity/</guid>
-      <description>Spring Security 개요 Spring Security 는 Servlet Filter를 이용하여 Service의 보안과 관련된 기능을 한곳에서 모아 처리하는 기능을 제공합니다.
+      <description>DRAFT. 수정 중.
+Spring Security 개요 Spring Security 는 Servlet Filter를 이용하여 Service의 보안과 관련된 기능을 한곳에서 모아 처리하는 기능을 제공합니다.
 Filter 는 Java Servlet Specification에 정의된 HttpServletRequest가 Servlet까지 오기 전에 사전(후) 처리하는 방법입니다.
 Spring Security와 관련된 동작들은 기본적으로 이 Filter layer에서 모두 이루어집니다. 참고로 아래 그림은 Spring Security Architecture 의 그림을 보강한 것입니다.
-위 Spring Security 는 위와 같은 FilterChain은 아래와 같은 Java Configuration 형태로 만들 수 있도록 합니다. WebSecurityConfigurerAdapter 당 FilterChain 이 하나씩 만들어집니다.</description>
+위 Spring Security 는 위와 같은 FilterChain은 아래와 같은 Java Configuration 형태로 만들 수 있도록 합니다.</description>
     </item>
     
     <item>

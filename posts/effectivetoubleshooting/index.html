@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Effective Toubleshooting - 용인 SCV</title>
+  <meta property="og:title" content="Effective Toubleshooting" />
+  <meta name="twitter:title" content="Effective Toubleshooting" />
+  <meta name="description" content="DRAFT. 수정 중.
+서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과 공감이 가는 내용들이었습니다.
+이에 SRE 책의 Troubleshooting 과 관련된 내용을 정리하며 더불어 제 생각을 추가하는 형태로 글을 써보았습니다.
+참고로 SRE 책의 내용은 Google이 무료로 공개하였습니다. https://landing.google.com/sre/books/ 입니다. 또한 jpub출판사를 통해 번역본이 출판되어 있습니다.">
+  <meta property="og:description" content="DRAFT. 수정 중.
+서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과 공감이 가는 내용들이었습니다.
+이에 SRE 책의 Troubleshooting 과 관련된 내용을 정리하며 더불어 제 생각을 추가하는 형태로 글을 써보았습니다.
+참고로 SRE 책의 내용은 Google이 무료로 공개하였습니다. https://landing.google.com/sre/books/ 입니다. 또한 jpub출판사를 통해 번역본이 출판되어 있습니다.">
+  <meta name="twitter:description" content="DRAFT. 수정 중.
+서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과  …">
+  <meta name="author" content="Yong-in SCV"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "용인 SCV",
+    
+    "url": "https:\/\/yonginscv.github.io"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/yonginscv.github.io"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/yonginscv.github.io",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/yonginscv.github.io\/posts\/effectivetoubleshooting\/",
+          "name": "Effective toubleshooting"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Yong-in SCV"
+  },
+  "headline": "Effective Toubleshooting",
+  "description" : "DRAFT. 수정 중.\n서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과 공감이 가는 내용들이었습니다.\n이에 SRE 책의 Troubleshooting 과 관련된 내용을 정리하며 더불어 제 생각을 추가하는 형태로 글을 써보았습니다.\n참고로 SRE 책의 내용은 Google이 무료로 공개하였습니다. https:\/\/landing.google.com\/sre\/books\/ 입니다. 또한 jpub출판사를 통해 번역본이 출판되어 있습니다.",
+  "inLanguage" : "en",
+  "wordCount":  1164 ,
+  "datePublished" : "2019-06-08T14:27:48",
+  "dateModified" : "2019-06-08T14:27:48",
+  "image" : "https:\/\/yonginscv.github.io\/img\/avatar-icon.png",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/yonginscv.github.io\/posts\/effectivetoubleshooting\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/yonginscv.github.io",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/yonginscv.github.io\/img\/avatar-icon.png",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Effective Toubleshooting" />
+<meta property="og:description" content="DRAFT. 수정 중.
+서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과 공감이 가는 내용들이었습니다.
+이에 SRE 책의 Troubleshooting 과 관련된 내용을 정리하며 더불어 제 생각을 추가하는 형태로 글을 써보았습니다.
+참고로 SRE 책의 내용은 Google이 무료로 공개하였습니다. https://landing.google.com/sre/books/ 입니다. 또한 jpub출판사를 통해 번역본이 출판되어 있습니다.">
+<meta property="og:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+<meta property="og:url" content="https://yonginscv.github.io/posts/effectivetoubleshooting/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="용인 SCV" />
+
+  <meta name="twitter:title" content="Effective Toubleshooting" />
+  <meta name="twitter:description" content="DRAFT. 수정 중.
+서문 그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다. 그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과  …">
+  <meta name="twitter:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@yonginscv" />
+  <meta name="twitter:creator" content="@yonginscv" />
+  <link href='https://yonginscv.github.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+  <meta name="twitter:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@yonginscv" />
+  <meta name="twitter:creator" content="@yonginscv" />
+  <meta property="og:url" content="https://yonginscv.github.io/posts/effectivetoubleshooting/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="용인 SCV" />
+
+  <meta name="generator" content="Hugo 0.55.6" />
+  <link rel="alternate" href="https://yonginscv.github.io/index.xml" type="application/rss+xml" title="용인 SCV"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://yonginscv.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://yonginscv.github.io/css/highlight.min.css" /><link rel="stylesheet" href="https://yonginscv.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://yonginscv.github.io">용인 SCV</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/posts">Blog</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="용인 SCV" href="https://yonginscv.github.io">
+            <img class="avatar-img" src="https://yonginscv.github.io/img/avatar-icon.png" alt="용인 SCV" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Effective Toubleshooting</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<p>DRAFT. 수정 중.</p>
+
+<h2 id="서문">서문</h2>
+
+<p>그동안 많은 Troubleshooting (장애 분석 및 처리)을 해오면서 관련 기술, 태세(문제을 해결하는 태도, 자세)를 언젠가는 정리를 한번 해야겠다고 생각했습니다.
+그러던 차에 Google팀이 펴낸 Site Reliability Engineering 책을 읽어보니 이 책의 한 문장 한 문장이 개인적으로 경험했던 내용들과 공감이 가는 내용들이었습니다.</p>
+
+<p>이에 SRE 책의 Troubleshooting 과 관련된 내용을 정리하며 더불어 제 생각을 추가하는 형태로 글을 써보았습니다.</p>
+
+<p>참고로 SRE 책의 내용은 Google이 무료로 공개하였습니다. <a href="https://landing.google.com/sre/books/">https://landing.google.com/sre/books/</a> 입니다. 또한 jpub출판사를 통해 번역본이 출판되어 있습니다.</p>
+
+<h2 id="effective-troubleshooting">Effective Troubleshooting</h2>
+
+<p><a href="https://landing.google.com/sre/sre-book/chapters/effective-troubleshooting/">SRE Book</a>에서는 SRE(Site Reliability Engineering)이 뭔지, 어떻게 운영되는지 등의 내용입니다. 여기서는 그 중 TroubleShooting 과 관련된 여러장을 정리하였습니다.</p>
+
+<p>많은 부분 책에서 빼고 더할 것이 없어 문장을 바로 인용하였습니다. 인용 중 영어는 위 <a href="https://landing.google.com/sre/books/">SRE</a>, 한국어는 jpub 출판본을 바탕으로 좀 더 의역하였습니다.</p>
+
+<blockquote>
+<p>Troubleshooting is a critical skill for anyone who operates distributed computing systems—especially SREs—but it’s often viewed as an innate skill that some people have and others don’t. One reason for this assumption is that, for those who troubleshoot often, it’s an ingrained process; explaining how to troubleshoot is difficult, much like explaining how to ride a bike. However, we believe that troubleshooting is both learnable and teachable.</p>
+
+<p>장애조치라는 기술은 분산시스템을 운영하는 모든 사람(특히 SRE들)에게는 필수적인 기술입니다. 하지만 때때로 선택받은 누군가만 보유할 수 있는 것 처럼 보입니다. 그렇게 보이는 이유 중 하나는 장애 조치를 자주 경험하는 사람에게는 트러블슈팅이 몸에 베인 듯 자연스럽지만 이를 설명하는 것은 마치 자전거를 타는 방법을 설명하는 것처럼 어렵기 때문입니다. 그러나 우리는 장애조치 역시 학습과 가르침이 가능한 부분이라고 믿습니다.</p>
+</blockquote>
+
+<hr />
+
+<blockquote>
+<p>Novices are often tripped up when troubleshooting because the exercise ideally depends upon two factors: an understanding of how to troubleshoot generically (i.e., without any particular system knowledge) and a solid knowledge of the system. While you can investigate a problem using only the generic process and derivation from first principles, we usually find this approach to be less efficient and less effective than understanding how things are supposed to work. Knowledge of the system typically limits the effectiveness of an SRE new to a system; there’s little substitute to learning how the system is designed and built.</p>
+
+<p>장애조치를 하는 방법에는 크게 두가지 방법이 있습니다.</p>
+
+<ul>
+<li>Runbook 등을 통해 서비스(시스템)에 대한 충분한 이해를 바탕으로 접근하는 방법</li>
+<li>Zero-Knowledge 기반 즉, 서비스에 대한 이해 없이 범용 기술을 바탕으로 문제를 해결하는 방법</li>
+</ul>
+
+<p>그 중 서비스(시스템)에 대한 이해 없이 문제를 해결해야하는 경우 효과적이지도 효율적이지도 않습니다.</p>
+</blockquote>
+
+<p>너무나도 당연하시만 시스템(서비스)에 대한 이해 없이 문제해결에 들어가는 것은 효율적이지 않습니다.
+그래서 Production 들어가는 서비스의 Architecture(deployment diagram 등), API 문서, 모니터링 방법, Config 설정 방법등을 정리해두어야 합니다. SRE book에는 Runbook에 대한 내용은 없는데 <a href="https://landing.google.com/sre/sre-book/chapters/launch-checklist/">인수인계 체크리스트</a>에 비슷한 내용이 있습니다.</p>
+
+<p>장애를 해결하는 과정은 귀납접/연역법과 같은 과학적 방법 중 <a href="https://ko.wikipedia.org/wiki/%EA%B0%80%EC%84%A4_%EC%97%B0%EC%97%AD_%EB%B0%A9%EB%B2%95">가설연력방법(hypothetico-deductive model or method)</a>과 비슷합니다.</p>
+
+<p><img src="/troubleshooting/process.png" alt="TroubleShooting Process" /></p>
+
+<p>가설 연역 방법은 관찰 및 연구 결과를 바탕(귀납법)으로 가설을 수립하고, 가설이 맞는지 확인하기 위해서 실험을 설계하고 시행하여 가설을 정당화 하는 과정입니다.</p>
+
+<p>TroubleShooting 과정도 이와 비슷합니다. 장애가 리포트 되면 모니터링 툴, 어플리케이션 로그, 시스템에 들어가서 수집한 로그, 최근의 배포 기록등을 토대로 문제의 원인에 대한 가설을 세우고 그 가설이 맞는지 다시 모니터링 데이터, 로그등을 통해서 확인하거나 시스템을 수정(설정등을 변경)해서 확인해볼 수 있습니다. 그리고 가설이 맞다고 판단되면 시스템에 필요 조치 취하여 장애로 부터 복구 시킵니다.</p>
+
+<p>다만 가설역연방법과 가장 큰 차이점은 장애 조치 과정에서는 문제의 원인을 찾는 것 보다는 장애 조치를 통해 시스템을 원상 복구하는 것이 최선입니다. 트래픽을 다른 클러스터로 돌린다던지 최악의 경우에는 시스템으로 들어오는 트래픽을 (일부)차단한다던지 해서 서비스를 최대한 빨리 원상 복구하는것이 우선입니다.</p>
+
+<p>이 장애 조치 과정 및 방법에 관해서는 Best Practice 내용을 복사합니다.</p>
+
+<h3 id="best-practices-for-incident-management-https-landing-google-com-sre-sre-book-chapters-managing-incidents">Best Practices for <a href="https://landing.google.com/sre/sre-book/chapters/managing-incidents/">Incident Management</a></h3>
+
+<ul>
+<li>Prioritize. 우선 순위에 따라 처리
+
+<ul>
+<li>서비스를 정성화 하는것이 최우선입니다.</li>
+<li>이후 원인 분석 및 근본 문제 해결합니다.</li>
+</ul></li>
+<li>Prepare. 사전 준비
+
+<ul>
+<li>사전에 Runbook을 작성해두어야 합니다.</li>
+</ul></li>
+<li>Trust.
+
+<ul>
+<li>장애조치 참여자들에게 충분한 자율권을 보장하고 시스템 접근 권한도 최대한 보장해야합니다.</li>
+</ul></li>
+<li>Introspect. 멘탈 관리
+
+<ul>
+<li>문제 터지면 심리적으로 압도되고 패닉으로 갈 수 있습니다.</li>
+<li>멘탈 관리 필요. 관리자라면 책임에 대한 부담을 덜어주어야 하겠고, 포스트모템에서도 장애 조치에 대한 비난은 절대적으로 삼가야하겠습니다.</li>
+</ul></li>
+<li>Consider alternatives.
+
+<ul>
+<li>고집 부리지 말고, 가설 검증 과정 중 틈틈이 대안 탐색하고 가설에 대한 많은 반증이 있으면/아닌거 같으면 손절하고 나와야겠습니다</li>
+</ul></li>
+<li>Practice.
+
+<ul>
+<li>여러번 이 과정을 경험하고 연습하면서 능숙해져야 하겠습니다.</li>
+</ul></li>
+<li>Change it around.
+
+<ul>
+<li>Were you incident commander last time? Take on a different role(인시던트 커맨더, Operation, Communication, Planning) this time.</li>
+<li>Encourage every team member to acquire familiarity with each role.</li>
+</ul></li>
+</ul>
+
+<p>장애 조치 과정을 통해 사고가 진화가 되면 정확한 Root Cause를 찾아 조치하고, 포스트모템 문서를 만들어서 재발 방지하고 문제 해결과정을 공유해야 합니다. 포스트 모템에는 실패 기록도 포스트모템에 정리하는 것이 모두를 위해 좋겠습니다.</p>
+
+<p>서비스를 운영하는 회사라면 장애 분석 및 조치 문서가 다 있을 것 같습니다만, 구글을 이를 적극 활용하나 봅니다.
+포스트모템 문서 읽기 모임도 있다고 합니다. 좋아보입니다. 이 글을 읽으시는 분이 장애 분석 경험이 적다면 회사의 포스트 모템 문서를 읽어봐도 좋겠고 인터넷에서 검색 가능한 포스트 모템 문서들을 함 읽어봐도 좋을 것 같습니다.</p>
+
+<h4 id="공개된-포스트모템-문서들">공개된 포스트모템 문서들</h4>
+
+<ul>
+<li><a href="https://github.com/danluu/post-mortems">A List of Post-mortems</a> : PostMotems 모음</li>
+<li><a href="https://cloud.google.com/blog/topics/inside-google-cloud/an-update-on-sundays-service-disruption">구글 2019년 6월 네트웍 장애</a></li>
+<li><a href="https://github.blog/2018-10-30-oct21-post-incident-analysis/">Github 2018년 10월 MySQL 장애</a></li>
+<li><a href="https://aws.amazon.com/ko/message/74876/">AWS 2018년 11월 Route53 장애</a></li>
+</ul>
+
+<p>절차와 방법은 그렇고 이를 시행하는 엔지니어의 역량과 관련되서는 <a href="https://landing.google.com/sre/sre-book/chapters/accelerating-sre-on-call/">SRE Chapter 27</a>에서 아래와 같은 특징이 요구된다고 합니다.</p>
+
+<blockquote>
+<ul>
+<li>Reverse Engineers: Figuring Out How Things Work</li>
+<li>갑자기 문제가 터졌을때 지금까지 한번도 본적이 없고, RunBook도 없는 상황에서 리버스 엔지니어링을 위한 문제 해결 능력.</li>
+<li>Statistical and Comparative Thinkers: Stewards of the Scientific Method Under Pressure</li>
+<li>큰 심적 부담하에서 수집 정보를 바탕으로 취할 수 있는 수백까지 행동중에 하나씩을 선택해낼 수 있는 능력</li>
+<li>Improv Artists: When the Unexpected Happens</li>
+<li>예상치 못한 일이 발생했을 때 즉흥적으로 대처할 수 있는 예술가.</li>
+</ul>
+</blockquote>
+
+<p>그리고 좀 더 구체적으로는 아래 스킬들이 필요할 것 같습니다.</p>
+
+<ul>
+<li>기존 SysAdmin이 담당했던 OS System에 대한 분석, 조치 능력, Linux Troubleshooting 능력</li>
+<li>네트웍 관려 문제 발생히 분석 및 해결을 위한 Network troubleshooting 능력</li>
+<li>그리고 기타 로그를 바탕을 원인 분석을 위한 코드 분석능력, AWS, DB 등등에 관한 지식</li>
+</ul>
+
+<p>이제 각 기술들에 대해 좀더 자세히 정리해보겠습니다.</p>
+
+<h2 id="linux-troubleshooting">Linux Troubleshooting</h2>
+
+<pre><code class="language-txt">uptime
+last
+w
+free -m
+df -h
+ps auxf
+ps eLf
+top
+/proc/$pid/fd
+ls -alt
+grep
+tail -f
+grep -v
+find
+awk
+sort
+uniq
+ss -ant | grep EST | awk '{print $5 $6}' | sort | uniq -c
+ss -lntp
+nstat
+xargs
+strace
+tcpdump
+openssl
+curl
+jq
+gnuplot
+ncdu
+ag
+lsof
+/var/log/*
+rsyslogd
+</code></pre>
+
+<ul>
+<li><a href="http://www.brendangregg.com/linuxperf.html">끝판왕 Brendan Gregg&rsquo;s Linux performance 모음</a></li>
+<li><a href="https://medium.com/netflix-techblog/linux-performance-analysis-in-60-000-milliseconds-accc10403c55">Linux Performance Analysis in 60 sec</a></li>
+<li><a href="https://github.com/jlevy/the-art-of-command-line">Art of Commandline</a></li>
+<li><a href="https://www.datascienceatthecommandline.com/">Data Science at the Command Line</a></li>
+</ul>
+
+<h2 id="network-troubleshooting">Network troubleshooting</h2>
+
+<p>네트웍과 관련된 문제는 주로 방화벽, 인증서 문제가 많습니다.</p>
+
+<ul>
+<li>AWS Security group 관련 설정 변경
+
+<ul>
+<li>ss -ant 에서 SYN-SENT 로 보이는 게 있을 때,</li>
+<li>telnet 이나 nc 로 접속 확인</li>
+</ul></li>
+<li>인증서 관련 에러
+
+<ul>
+<li>curl 이나 openssl로 확인 가능</li>
+<li>curl -k -v $URL</li>
+<li>openssl s_client -connect $URL:$Port &lt; /dev/null</li>
+<li>trusted chain 관련 에러는 서버 인증서가 linux/java trusted CA 에 없는 경우</li>
+<li>proxy 문제</li>
+</ul></li>
+</ul>
+
+<p>하지만 의외로 많은 문제가 네트워크 패킷 분석을 통해 분석될때가 많았습니다.</p>
+
+<p>ssh접속해서 간단히 확인해볼 수 있는 방법은 tcpdump, tshark 혹은 ngrep 을 이용할 수 있습니다.</p>
+
+<p>하지만 제일 확실한 방법은 tcpdump 통해 pcap 파일을 확보하고 wireshark를 통해 분석하는 것 입니다.</p>
+
+<p>또한 패킷 분석을 진행하려면 TCP handshake, TLS handshake 관련 지식이 필요합니다.</p>
+
+<p>간혹 tcp접속이 폭주해서 문제가 되는 경우도 있는데 이때는 nstat 명령어로 관련 TCP stat 확인</p>
+
+<ul>
+<li><a href="https://blog.cloudflare.com/syn-packet-handling-in-the-wild-kr/">SYN 패킷 처리 실제</a></li>
+<li><a href="https://loicpefferkorn.net/2016/03/linux-network-metrics-why-you-should-use-nstat-instead-of-netstat/">Netstat 대신 nstat</a></li>
+</ul>
+
+<h2 id="other-troubleshooting">Other troubleshooting</h2>
+
+<h3 id="aws">AWS</h3>
+
+<p>athena
+ec2 alert
+cloudwatch
+cloudtrail</p>
+
+<h3 id="services">$$services</h3>
+
+<p>datadog
+splunk
+sumologic
+datadog APM
+jeniffer
+scouter - xy view
+syntheric monitor</p>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+<li><a href="https://www.usenix.org/conference/srecon19americas/program">SRE Con</a></li>
+<li><a href="https://tls.ulfheim.net/">The Illustrated TLS Connection</a></li>
+<li><a href="https://www.slideshare.net/deview/216sresearchreliabilityengineering">네이버 SRE</a>
+
+<ul>
+<li>Scribe 역활이 있다는게 인상적. Postmotem 한번 작성해보면 왜 필요한지 강력히 공감됨.</li>
+</ul></li>
+</ul>
+
+
+        
+
+        
+            <hr/>
+            <section id="social-share">
+              <div class="list-inline footer-links">
+                
+
+<div class="share-box" aria-hidden="true">
+    <ul class="share">
+      
+      <li>
+        <a href="//twitter.com/share?url=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f&amp;text=Effective%20Toubleshooting&amp;via=yonginscv" target="_blank" title="Share on Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//plus.google.com/share?url=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f" target="_blank" title="Share on Google Plus">
+          <i class="fab fa-google-plus"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f" target="_blank" title="Share on Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//reddit.com/submit?url=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f&amp;title=Effective%20Toubleshooting" target="_blank" title="Share on Reddit">
+          <i class="fab fa-reddit"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f&amp;title=Effective%20Toubleshooting" target="_blank" title="Share on LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f&amp;title=Effective%20Toubleshooting" target="_blank" title="Share on StumbleUpon">
+          <i class="fab fa-stumbleupon"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyonginscv.github.io%2fposts%2feffectivetoubleshooting%2f&amp;description=Effective%20Toubleshooting" target="_blank" title="Share on Pinterest">
+          <i class="fab fa-pinterest"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+              </div>
+            </section>
+        
+
+        
+          
+          
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://yonginscv.github.io/posts/springsecurity/" data-toggle="tooltip" data-placement="top" title="Spring Security">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://twitter.com/yonginscv" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            <a href="" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://yonginscv.github.io">Yong-in SCV</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://yonginscv.github.io">용인 SCV</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.55.6</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://yonginscv.github.io/js/main.js"></script>
+<script src="https://yonginscv.github.io/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://yonginscv.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
+
