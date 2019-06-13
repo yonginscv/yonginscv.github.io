@@ -6,10 +6,35 @@
     <description>Recent content in Posts on 용인 SCV</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 08 Jun 2019 14:27:48 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 14 Jun 2019 01:52:24 +0900</lastBuildDate>
     
 	<atom:link href="https://yonginscv.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>초격차</title>
+      <link>https://yonginscv.github.io/posts/outstandingsec/</link>
+      <pubDate>Fri, 14 Jun 2019 01:52:24 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/outstandingsec/</guid>
+      <description>초격차
+권오현 저.
+인사 조직도를 먼저 그리고 적임자를 탐색.
+인재상:
+p.256
+ 모든 조건을 완벽하게 갖춘 인재는 없습니다. 반드시 피해야할 인재상부터 규명해야 합니다. &amp;hellip; 저는 인재 유형을 네 가지로 분류하고 인재 양성에 활용하였습니다.
+ 선제적이고 적극적인 사람: 본인 스스로 성취 동기가 강하고 호기심이 많아서, 무슨 일이든 적극적으로 대처하는 사람을 말합니다. 이런 타입이 가장 이상적인 인재상입니다. 개선 의지가 있고, 반응하는 사람: 자신의 잘못이나 실수, 혹은 부족한 점이 있다면 그것을 수정하겠다는 의지가 있는 사람들입니다.</description>
+    </item>
+    
+    <item>
+      <title>인증서 발행 관리 관련 지식 정리</title>
+      <link>https://yonginscv.github.io/posts/certificate/</link>
+      <pubDate>Fri, 14 Jun 2019 01:25:35 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/certificate/</guid>
+      <description>Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.
+대칭/비대칭키 암호화, Hash, Signing, HMAC 구별하기. 앞으로 헛깔리지 말기 들어가기 전에  암화 관련된 것은 사용하기 어려움. 제대로 사용해야 함 학교에서 배운 것. 네이버 검색해서 나오는 것은 잘못된 것이 많음 Cryptographic Right Answers  대칭키 암호화  AES  AES 암호화 과정 AES 128과 256 차이는 몇 바퀴 돌리는지 차이 128: 10 rounds, 192: 12 rounds, 256: 14 rounds  mode of operation  128bit 가 넘어가는 평문을 암호화 할때 필요 Wikipedia Block cipher mode of operation IV 관리가 어려움 개발에서 보통 0값을 사용하나 권장되지 않음 IV값을 random으로 생성하고 cipher text 와 같이 저장.</description>
+    </item>
     
     <item>
       <title>Effective Toubleshooting</title>

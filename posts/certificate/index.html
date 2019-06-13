@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>인증서 발행 관리 관련 지식 정리 - 용인 SCV</title>
+  <meta property="og:title" content="인증서 발행 관리 관련 지식 정리" />
+  <meta name="twitter:title" content="인증서 발행 관리 관련 지식 정리" />
+  <meta name="description" content="Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.
+대칭/비대칭키 암호화, Hash, Signing, HMAC 구별하기. 앞으로 헛깔리지 말기 들어가기 전에  암화 관련된 것은 사용하기 어려움. 제대로 사용해야 함 학교에서 배운 것. 네이버 검색해서 나오는 것은 잘못된 것이 많음 Cryptographic Right Answers  대칭키 암호화  AES  AES 암호화 과정 AES 128과 256 차이는 몇 바퀴 돌리는지 차이 128: 10 rounds, 192: 12 rounds, 256: 14 rounds  mode of operation  128bit 가 넘어가는 평문을 암호화 할때 필요 Wikipedia Block cipher mode of operation IV 관리가 어려움 개발에서 보통 0값을 사용하나 권장되지 않음 IV값을 random으로 생성하고 cipher text 와 같이 저장.">
+  <meta property="og:description" content="Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.
+대칭/비대칭키 암호화, Hash, Signing, HMAC 구별하기. 앞으로 헛깔리지 말기 들어가기 전에  암화 관련된 것은 사용하기 어려움. 제대로 사용해야 함 학교에서 배운 것. 네이버 검색해서 나오는 것은 잘못된 것이 많음 Cryptographic Right Answers  대칭키 암호화  AES  AES 암호화 과정 AES 128과 256 차이는 몇 바퀴 돌리는지 차이 128: 10 rounds, 192: 12 rounds, 256: 14 rounds  mode of operation  128bit 가 넘어가는 평문을 암호화 할때 필요 Wikipedia Block cipher mode of operation IV 관리가 어려움 개발에서 보통 0값을 사용하나 권장되지 않음 IV값을 random으로 생성하고 cipher text 와 같이 저장.">
+  <meta name="twitter:description" content="Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.
+대칭/비대칭키 암호화, Hash, …">
+  <meta name="author" content="Yong-in SCV"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "용인 SCV",
+    
+    "url": "https:\/\/yonginscv.github.io"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/yonginscv.github.io"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/yonginscv.github.io",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/yonginscv.github.io\/posts\/certificate\/",
+          "name": "인증서 발행 관리 관련 지식 정리"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Yong-in SCV"
+  },
+  "headline": "인증서 발행 관리 관련 지식 정리",
+  "description" : "Cerficiate, RSA pubkey, privatekey, pem\/der\/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.\n대칭\/비대칭키 암호화, Hash, Signing, HMAC 구별하기. 앞으로 헛깔리지 말기 들어가기 전에  암화 관련된 것은 사용하기 어려움. 제대로 사용해야 함 학교에서 배운 것. 네이버 검색해서 나오는 것은 잘못된 것이 많음 Cryptographic Right Answers  대칭키 암호화  AES  AES 암호화 과정 AES 128과 256 차이는 몇 바퀴 돌리는지 차이 128: 10 rounds, 192: 12 rounds, 256: 14 rounds  mode of operation  128bit 가 넘어가는 평문을 암호화 할때 필요 Wikipedia Block cipher mode of operation IV 관리가 어려움 개발에서 보통 0값을 사용하나 권장되지 않음 IV값을 random으로 생성하고 cipher text 와 같이 저장.",
+  "inLanguage" : "en",
+  "wordCount":  2825 ,
+  "datePublished" : "2019-06-14T01:25:35",
+  "dateModified" : "2019-06-14T01:25:35",
+  "image" : "https:\/\/yonginscv.github.io\/img\/avatar-icon.png",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/yonginscv.github.io\/posts\/certificate\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/yonginscv.github.io",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/yonginscv.github.io\/img\/avatar-icon.png",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="인증서 발행 관리 관련 지식 정리" />
+<meta property="og:description" content="Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.
+대칭/비대칭키 암호화, Hash, Signing, HMAC 구별하기. 앞으로 헛깔리지 말기 들어가기 전에  암화 관련된 것은 사용하기 어려움. 제대로 사용해야 함 학교에서 배운 것. 네이버 검색해서 나오는 것은 잘못된 것이 많음 Cryptographic Right Answers  대칭키 암호화  AES  AES 암호화 과정 AES 128과 256 차이는 몇 바퀴 돌리는지 차이 128: 10 rounds, 192: 12 rounds, 256: 14 rounds  mode of operation  128bit 가 넘어가는 평문을 암호화 할때 필요 Wikipedia Block cipher mode of operation IV 관리가 어려움 개발에서 보통 0값을 사용하나 권장되지 않음 IV값을 random으로 생성하고 cipher text 와 같이 저장.">
+<meta property="og:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+<meta property="og:url" content="https://yonginscv.github.io/posts/certificate/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="용인 SCV" />
+
+  <meta name="twitter:title" content="인증서 발행 관리 관련 지식 정리" />
+  <meta name="twitter:description" content="Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.
+대칭/비대칭키 암호화, Hash, …">
+  <meta name="twitter:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@yonginscv" />
+  <meta name="twitter:creator" content="@yonginscv" />
+  <link href='https://yonginscv.github.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+  <meta name="twitter:image" content="https://yonginscv.github.io/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@yonginscv" />
+  <meta name="twitter:creator" content="@yonginscv" />
+  <meta property="og:url" content="https://yonginscv.github.io/posts/certificate/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="용인 SCV" />
+
+  <meta name="generator" content="Hugo 0.55.6" />
+  <link rel="alternate" href="https://yonginscv.github.io/index.xml" type="application/rss+xml" title="용인 SCV"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://yonginscv.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://yonginscv.github.io/css/highlight.min.css" /><link rel="stylesheet" href="https://yonginscv.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-142102662-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://yonginscv.github.io">용인 SCV</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/posts">Blog</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="용인 SCV" href="https://yonginscv.github.io">
+            <img class="avatar-img" src="https://yonginscv.github.io/img/avatar-icon.png" alt="용인 SCV" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>인증서 발행 관리 관련 지식 정리</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<p>Cerficiate, RSA pubkey, privatekey, pem/der/cer파일, CSR, certificate chain, root CA, trusted CA 관리, private key, .jks, p12, .pfs 등 여러가지 keystore format 등 인증서와 관련된 여러가지를 정리합니다.</p>
+
+<h2 id="대칭-비대칭키-암호화-hash-signing-hmac-구별하기-앞으로-헛깔리지-말기">대칭/비대칭키 암호화, Hash, Signing, HMAC 구별하기.  앞으로 헛깔리지 말기</h2>
+
+<h3 id="들어가기-전에">들어가기 전에</h3>
+
+<ul>
+<li>암화 관련된 것은 사용하기 어려움. 제대로 사용해야 함</li>
+<li>학교에서 배운 것. 네이버 검색해서 나오는 것은 잘못된 것이 많음</li>
+<li><a href="https://latacora.singles/2018/04/03/cryptographic-right-answers.html">Cryptographic Right Answers</a></li>
+</ul>
+
+<h3 id="대칭키-암호화">대칭키 암호화</h3>
+
+<ul>
+<li>AES
+
+<ul>
+<li><a href="http://www.cs.bc.edu/~straubin/cs381-05/blockciphers/rijndael_ingles2004.swf">AES 암호화 과정</a></li>
+<li>AES 128과 256 차이는 몇 바퀴 돌리는지 차이</li>
+<li>128: 10 rounds, 192: 12 rounds, 256: 14 rounds</li>
+</ul></li>
+<li>mode of operation
+
+<ul>
+<li>128bit 가 넘어가는 평문을 암호화 할때 필요</li>
+<li><a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation">Wikipedia Block cipher mode of operation</a></li>
+<li>IV 관리가 어려움</li>
+<li>개발에서 보통 0값을 사용하나 권장되지 않음</li>
+<li>IV값을 random으로 생성하고 cipher text 와 같이 저장.</li>
+<li>권장: AES-256-GCM</li>
+<li>Key: 256bit, IV: 96bit ramdom 생성 혹은 sequential, cipher text와 iv 함께 저장.</li>
+</ul></li>
+</ul>
+
+<h3 id="비대칭키-암호화">비대칭키 암호화</h3>
+
+<ul>
+<li>RSA
+
+<ul>
+<li><a href="https://algorithmsoup.wordpress.com/2019/01/15/breaking-an-unbreakable-code-part-1-the-hack/">RSA 99.8% 안전?</a></li>
+</ul></li>
+<li>Elliptic curve (P-256, ed25519, curve25519)
+
+<ul>
+<li>여러가지 커브가 존재. P-256이 호환성이 높음</li>
+<li>대표적인 library libsodium 은 curve25519를 사용.</li>
+<li>ed25519는 signing 전용.</li>
+</ul></li>
+</ul>
+
+<h3 id="signature">Signature</h3>
+
+<ul>
+<li>Hash 를 비대칭키로 암호화 한 것</li>
+<li>2048 bit 이라 남는것은 padding 필요. padding 에 따라서 여러가지 scheme 이 존재</li>
+<li>SHA256withRSA. 많은 x.509 인증서에 사용.
+
+<ul>
+<li>PKCS#1 v1.5 padding</li>
+<li>통신에는 사용하면 안됨</li>
+<li><a href="https://crypto.stackexchange.com/questions/12688/can-you-explain-bleichenbachers-cca-attack-on-pkcs1-v1-5">Chosen Ciphertext Attack 에 취약</a></li>
+</ul></li>
+<li>참고: Encrytion 하고 Signature 같이 쓸때는 Encrypt(평문+Signature)
+
+<ul>
+<li>정은아 너만봐(메세지, 내가보낸거야) , Signature가 밖에 있으면 남의 signature로 조작가능</li>
+</ul></li>
+</ul>
+
+<h3 id="hmac">HMAC</h3>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/HMAC">HMAC-SHA256</a>
+
+<ul>
+<li>대략 SHA256(Key+Message)</li>
+</ul></li>
+<li>PBKDF2
+
+<ul>
+<li>평문(패스워드)로 부터 Encryption Key를 생성할때 사용. HMAC를 반복해서 사용</li>
+<li>Password-Based Key Derivation Function 2)</li>
+</ul></li>
+<li>REST API Authorization 헤더에 많이 사용
+
+<ul>
+<li>예: Azure API, <a href="https://docs.aws.amazon.com/general/latest/gr/sigv4-add-signature-to-request.html">Amazon API</a></li>
+</ul></li>
+</ul>
+
+<h3 id="기타">기타</h3>
+
+<ul>
+<li>헤깔리지 말자.
+
+<ul>
+<li>SHA256으로 암호화 했습니다.</li>
+<li>Base64로 암호화 했습니다.</li>
+<li>Base64 는 encording, query parameter에 들어갈께는 url safe base64 사용해야.</li>
+</ul></li>
+<li>암화화 할떄 password 는 ?
+
+<ul>
+<li>보통 propiatary 혹은 PBKDF2. library에 따라 다름.</li>
+<li>다른 application과 호환성을 맞추려면 PDKDF function을 명확하게 지정하거나 혹은 Key를 Derivation 하지말고 byte array로 설정</li>
+<li>예) openssl의 경우 version따라 KDF이 다름( 1.0.x : md5, 1.1.x : sha256 )</li>
+<li>web service에서 ecnryption할때 평문 password를 사용하면 안됨. 성능이 매우 떨어짐.</li>
+<li>PBKDF 함수들이 의도적으로 시간 오래 걸리게 만들었음</li>
+<li>참고 - ID/password 인증에는 [SRP Secure Remote Password Protocol](&ldquo;<a href="https://en.wikipedia.org/wiki/Secure_Remote_Password_protocol&quot;">https://en.wikipedia.org/wiki/Secure_Remote_Password_protocol&quot;</a>) 이 좋음</li>
+</ul></li>
+<li>쓰지 말자는거 쓰지 말자
+
+<ul>
+<li>MD5, SHA1: 쉽게 변조 가능.</li>
+<li><a href="https://gist.github.com/epixoip/23068f4bc81db505115c43e7751522f2">hashcat bench</a>, 1x Nvidia GTX 2080 FE 기준</li>
+<li>MD5: 370억 hash/s</li>
+<li>SHA256: 5억 hash/s</li>
+<li>PBKDF2-HMAC-SHA512(1000 iteration): 247.9 kH/s</li>
+</ul></li>
+<li>역hash 는 만들수 없으나, 평문이 제한된다면 평문:hash 테이블을 만들어 hash로 부터 평문을 찾을 수 있음
+
+<ul>
+<li>예. postfix 빼고 9자리 saguid sha256 hash는 한시간 반에 만들 수 있음. pow(24,9)/500000000./60./60. = 1.5</li>
+</ul></li>
+</ul>
+
+<h2 id="asn-1-der-pem-포맷">ASN.1, DER/PEM 포맷</h2>
+
+<h3 id="asn-1">ASN.1</h3>
+
+<p>[Abstract Syntax Notation One (ASN.1)](&ldquo;<a href="https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One&quot;">https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One&quot;</a>)</p>
+
+<ul>
+<li>요즘이라면 XML schema, JSON schama에 해당
+
+<ul>
+<li>asn.1 에 json encoding rule, xml encording rule 도 있음.</li>
+</ul></li>
+<li>TLV(Tag Length Value)포맷</li>
+</ul>
+
+<h4 id="asn-1-wiki의-예제-https-en-wikipedia-org-wiki-abstract-syntax-notation-one"><a href="https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">asn.1 wiki의 예제</a></h4>
+
+<p>FooProtocol ASN.1 module definition</p>
+
+<pre><code class="language-txt">FooQuestion ::= SEQUENCE {
+    trackingNumber INTEGER,
+    question       IA5String
+}
+</code></pre>
+
+<p>trackingNumber 가 5이고, question 이 &ldquo;Anybody there?&rdquo; 인 데이터의 DER encoding 결과(hex로 표시)
+&gt; 30 13 02 01 05 16 0e 41 6e 79 62 6f 64 79 20 74 68 65 72 65 3f</p>
+
+<p>DER 결과 해석</p>
+
+<pre><code class="language-txt">30 — type tag indicating SEQUENCE
+13 — length in octets of value that follows
+  02 — type tag indicating INTEGER
+  01 — length in octets of value that follows
+    05 — value (5)
+  16 — type tag indicating IA5String 
+     (IA5 means the full 7-bit ISO 646 set, including variants, 
+      but is generally US-ASCII)
+  0e — length in octets of value that follows
+    41 6e 79 62 6f 64 79 20 74 68 65 72 65 3f — value (&quot;Anybody there?&quot;)
+</code></pre>
+
+<p>openssl cmd example</p>
+
+<pre><code class="language-txt">$ echo -n &quot;30 13 02 01 05 16 0e 41 6e 79 62 6f 64 79 20 74 68 65 72 65 3f&quot; | tr -d [:space:] | xxd -r -p | openssl asn1parse -inform DER -i
+    0:d=0  hl=2 l=  19 cons: SEQUENCE
+    2:d=1  hl=2 l=   1 prim:  INTEGER           :05
+    5:d=1  hl=2 l=  14 prim:  IA5STRING         :Anybody there?
+</code></pre>
+
+<h3 id="der-pem-cer">DER, PEM, CER</h3>
+
+<p>DER: asn.1 의 binary packing encording
+PEM: base64(DER) 앞/뒤에 &mdash; START / &mdash; END 붙인 것
+CER: 윈도우 사용 포맷, DER혹은 PEM 둘다 동작</p>
+
+<pre><code class="language-txt">$ cat a.pem
+-----BEGIN CERTIFICATE-----
+MIIDXjCCAwOgAwIBAgICEBQwCgYIKoZIzj0EAwIwejEyMDAGA1UEAxMpU2Ftc3Vu
+ZyBFbGVjdHJvbmljcyBPQ0YgU2VydmVyIFN1YkNBIFRFU1QxGTAXBgNVBAsTEE9D
+...생략
+dW5naW90cy5jb20wCgYIKoZIzj0EAwIDSQAwRgIhAIX7nwFvlcsywWQWPoBe5CpL
+QXxEZCmnraBJaguVjfCCAiEA94ZK+OKclRG0i0EMSX1IGPuzsIHyk/tXnwmfL281
+4tw=
+-----END CERTIFICATE-----
+
+$ cat a.pem  | grep -v &quot;\-\-\-&quot; | base64 -d &gt; a.der
+$ openssl x509 -inform DER -in a.der -outform PEM -out a.pem.out
+$ cat a.pem.out
+-----BEGIN CERTIFICATE-----
+MIIDXjCCAwOgAwIBAgICEBQwCgYIKoZIzj0EAwIwejEyMDAGA1UEAxMpU2Ftc3Vu
+ZyBFbGVjdHJvbmljcyBPQ0YgU2VydmVyIFN1YkNBIFRFU1QxGTAXBgNVBAsTEE9D
+...생략
+dW5naW90cy5jb20wCgYIKoZIzj0EAwIDSQAwRgIhAIX7nwFvlcsywWQWPoBe5CpL
+QXxEZCmnraBJaguVjfCCAiEA94ZK+OKclRG0i0EMSX1IGPuzsIHyk/tXnwmfL281
+4tw=
+-----END CERTIFICATE-----
+
+</code></pre>
+
+<h2 id="x-509-인증서-둘러보기">X.509 인증서 둘러보기</h2>
+
+<h3 id="x-509의-asn-1-정의는-rfc5280-https-tools-ietf-org-html-rfc5280">X.509의 ASN.1 정의는 [RFC5280](&ldquo;<a href="https://tools.ietf.org/html/rfc5280&quot;">https://tools.ietf.org/html/rfc5280&quot;</a>)</h3>
+
+<pre><code class="language-txt">Certificate  ::=  SEQUENCE  {
+     tbsCertificate       TBSCertificate,
+     signatureAlgorithm   AlgorithmIdentifier,
+     signature            BIT STRING  }
+
+TBSCertificate  ::=  SEQUENCE  {
+     version         [0]  Version DEFAULT v1,
+     serialNumber         CertificateSerialNumber,
+     signature            AlgorithmIdentifier,
+     issuer               Name,
+     validity             Validity,
+     subject              Name,
+     subjectPublicKeyInfo SubjectPublicKeyInfo,
+     issuerUniqueID  [1]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version MUST be v2 or v3
+     subjectUniqueID [2]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version MUST be v2 or v3
+     extensions      [3]  Extensions OPTIONAL
+                          -- If present, version MUST be v3 --  }
+
+Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
+
+Extension  ::=  SEQUENCE  {
+     extnID      OBJECT IDENTIFIER,
+     critical    BOOLEAN DEFAULT FALSE,
+     extnValue   OCTET STRING
+                 -- contains the DER encoding of an ASN.1 value
+                 -- corresponding to the extension type identified
+                 -- by extnID
+     }
+</code></pre>
+
+<p>OBJECT IDENTIFIER</p>
+
+<ul>
+<li>Field의 Uniq Identifier</li>
+<li>계층적 구조</li>
+<li>예 x.509 extentions oid 는 대게 2.5.29 로 시작 (아닌것도 있음)
+
+<ul>
+<li>id-ce OBJECT IDENTIFIER  ::=  {joint-iso-ccitt(2) ds(5) 29}</li>
+<li><a href="http://oid-info.com/get/2.5.29">X.509v3 extentions OIDs</a></li>
+<li><a href="https://www.alvestrand.no/objectid/2.5.29.html">X.509v3 extentions OIDs(2)</a></li>
+</ul></li>
+<li>최신 OID는 openssl tool 이 해석 못하는 경우도 많음.</li>
+</ul>
+
+<p>더 자세한 분석은 아래 링크 참조</p>
+
+<ul>
+<li><a href="http://www.cryptologie.net/article/262/what-are-x509-certificates-rfc-asn1-der/">x.509를 asn.1, DER 분석</a></li>
+<li><a href="https://www.cem.me/pki/index.html">PKI관련 RSA key, 인증서 등 포맷 분석</a> <strong>GOOD!</strong></li>
+</ul>
+
+<h3 id="주요-필드-rfc2580-https-tools-ietf-org-html-rfc5280">주요 필드 - <a href="https://tools.ietf.org/html/rfc5280">RFC2580</a></h3>
+
+<ul>
+<li>Issuer: 발행자 (RootCA는 Issuer == Subject)</li>
+<li>Subject: 발급 대상, CN= 에 보통 domain을 기입</li>
+<li>Validity: 유효기간.</li>
+</ul>
+
+<h3 id="주요-standard-extentions-rfc2580-https-tools-ietf-org-html-rfc5280">주요 Standard Extentions - <a href="https://tools.ietf.org/html/rfc5280">RFC2580</a></h3>
+
+<ul>
+<li>Subject Key Identifier
+
+<ul>
+<li>키 검색할</li>
+<li>The keyIdentifier is composed of the 160-bit SHA-1 hash of the value of the BIT STRING subjectPublicKey</li>
+</ul></li>
+<li>Key Usage</li>
+<li>Subject Alternative Name: 도메인이름이 들어감.</li>
+<li>Basic Constraints</li>
+<li>CRL Distribution Points</li>
+</ul>
+
+<h3 id="주요-확장-extentions">주요 확장 Extentions</h3>
+
+<ul>
+<li>Authority Information Access
+
+<ul>
+<li>OCSP 주소가 들어감.</li>
+</ul></li>
+<li>CT Precertificate SCTs
+
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc6962">RFC6962</a></li>
+</ul></li>
+</ul>
+
+<h2 id="keystore-java-keystore-pkcs12-haproxy">KeyStore( Java Keystore, PKCS12, haproxy,  )</h2>
+
+<ul>
+<li><a href="https://www.cem.me/20150315-cert-binaries-6.html">JavaKeystore, .p12 foramt</a></li>
+<li>Java KeyStore
+
+<ul>
+<li>Sun&rsquo;s propiatary key store format. 하지만 소스는 공개되어 있음</li>
+<li>Keystore 와 trusted store 같이 있음</li>
+<li><a href="https://docs.oracle.com/cd/E23521_01/doc.60/e23523/adm_security.htm">https://docs.oracle.com/cd/E23521_01/doc.60/e23523/adm_security.htm</a> 의 그림참조</li>
+<li>명령어: keytool</li>
+</ul></li>
+<li>pkcs12
+
+<ul>
+<li>RFC7292 공개 포맷</li>
+<li>ASN.1 정의: <a href="https://tools.ietf.org/html/rfc7292#appendix-D">https://tools.ietf.org/html/rfc7292#appendix-D</a></li>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_12">PKCS12 in wikipedia</a></li>
+<li>.p12 / .pfc 확장자</li>
+<li>명령어: openssl pkcs12</li>
+</ul></li>
+</ul>
+
+<h2 id="hsm-pkcs11">HSM / PKCS11</h2>
+
+<ul>
+<li>HSM. Hardware Security Module</li>
+<li>Privakey를 절대 안전한 곳, 하드웨어에 저장. Admin도 꺼내 볼 수 없음.</li>
+<li>엄청나게 비쌈. 백업장치가 1800만원.</li>
+<li>보통 Gemalto 제품 사용. 구 Safanet. 제품시리지. LunaHSM</li>
+<li>AWS의 경우 Cloud HSM, Cloud HSM Classic 서비스 제공</li>
+<li>HSM에 접근하기 위한 PKCS11 표준이 정의되어 있음.</li>
+</ul>
+
+<h2 id="인증서-발행하기">인증서 발행하기</h2>
+
+<h3 id="openssl-로-인증서-발행하기">Openssl 로 인증서 발행하기</h3>
+
+<p><a href="https://jamielinux.com/docs/openssl-certificate-authority/">OpenSSL Certificate Authority</a> 에 잘 정리되어 있음.</p>
+
+<p>주의: 아래 extentions을 cnf 파일에 정의해두어야 함.</p>
+
+<ul>
+<li>Serial number 규칙</li>
+<li>X509v3 Key Usage</li>
+<li>X509v3 CRL Distribution Point</li>
+<li>Authority Information Access(OCSP)</li>
+<li>X509v3 Subject Alternative Name</li>
+</ul>
+
+<p>예 example.cnf</p>
+
+<pre><code class="language-example.cnf">HOME            = /home/whatever/CA
+RANDFILE        = $ENV::HOME/.rnd
+oid_section     = new_oids
+
+[ new_oids ]
+tsa_policy1 = 1.2.3.4.1
+tsa_policy2 = 1.2.3.4.5.6
+tsa_policy3 = 1.2.3.4.5.7
+
+[ ca ]
+default_ca  = CA_default        # The default ca section
+
+[ CA_default ]
+
+dir     = $HOME     # Where everything is kept
+certs       = $dir/certs        # Where the issued certs are kept
+crl_dir     = $dir/crl      # Where the issued crl are kept
+database    = $dir/index.txt    # database index file.
+unique_subject  = no            # Set to 'no' to allow creation of
+new_certs_dir   = $dir/newcerts     # default place for new certs.
+certificate = $dir/ci_intermediate_test.pem # The CA certificate
+serial      = $dir/serial       # The current serial number
+crlnumber   = $dir/crlnumber    # the current crl number
+crl     = $dir/crl.pem      # The current CRL
+private_key = $dir/private/ci_intermediate_test.key.pem # The private key
+RANDFILE    = $dir/private/.rand    # private random number file
+
+x509_extensions = usr_cert      # The extentions to add to the cert
+
+name_opt    = ca_default        # Subject Name options
+cert_opt    = ca_default        # Certificate field options
+
+default_days    = 7300          # how long to certify for
+default_crl_days= 30            # how long before next CRL
+default_md  = default       # use public key default MD
+preserve    = no            # keep passed DN ordering
+
+policy      = policy_match
+
+[ policy_match ]
+countryName     = optional
+stateOrProvinceName = optional
+organizationName    = optional
+organizationalUnitName  = optional
+commonName      = supplied
+emailAddress        = optional
+
+
+####################################################################
+[ req ]
+default_bits        = 2048
+default_keyfile     = privkey.pem
+distinguished_name  = req_distinguished_name
+attributes      = req_attributes
+x509_extensions = v3_ca # The extentions to add to the self signed cert
+string_mask = utf8only
+
+[ req_distinguished_name ]
+countryName         = Country Name (2 letter code)
+countryName_default     = KR
+countryName_min         = 2
+countryName_max         = 2
+
+0.organizationName      = Organization Name (eg, company)
+0.organizationName_default  = Hello Company
+
+organizationalUnitName      = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = your group
+
+commonName          = Common Name (e.g. server FQDN or YOUR name)
+commonName_max          = 64
+
+subjectAltName          = DNS:*.example.com
+
+[ req_attributes ]
+challengePassword       = A challenge password
+challengePassword_min       = 4
+challengePassword_max       = 20
+unstructuredName        = An optional company name
+
+[ usr_cert ]
+basicConstraints=CA:FALSE
+nsComment           = &quot;example Certificate&quot;
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
+subjectAltName                  = DNS:*.example.com
+nsCaRevocationUrl = http://ca.example.com/crl
+authorityInfoAccess = OCSP;URI:http://ocsp.example.com
+
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+</code></pre>
+
+<p>Private Key 생성</p>
+
+<pre><code class="language-txt">$ openssl ecparam -name prime256v1 -genkey | openssl ec -out demo_20190122.key.pem
+read EC key
+writing EC key
+
+$ cat demo_20190122.key.pem
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEICRXx7XnCvpsw3sEjtZqXXU5TrPa5RJxsEPlM/YmWYMjoAoGCCqGSM49
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+KoZ3brY/W2iKbtUVZsRJ9alvUQ1fu5WpsQ==
+-----END EC PRIVATE KEY-----
+</code></pre>
+
+<p>CSR 생성
+&gt; note: 대행사에 인증서 발행 요청시, 대행사에서 privte key 생생하도록 하지 말고 CSR을 대행사에 보내야함.</p>
+
+<pre><code class="language-txt">$ openssl req -config CA/example.cnf -new -sha256 -key demo_20190122.key.pem -out demo_20190122.csr.pem
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [KR]:
+Organization Name (eg, company) [Example Company]:
+Organizational Unit Name (eg, section) [You Group]:
+Common Name (e.g. server FQDN or YOUR name) []:test.example.com
+DNS:*.samsungiots.com []:test.example.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+
+$ openssl req -in demo_20190122.csr.pem -noout -text
+Certificate Request:
+    Data:
+        Version: 0 (0x0)
+        Subject: C=KR, O=Example Company, OU=You Group, CN=test.example.com/subjectAltName=test.example.com
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub:
+                    04:ec:7d:a6:b9:c7:93:5c:26:0f:ad:50:a3:e0:36:
+                    95:24:91:5e:aa:86:0b:f1:04:ff:cb:e4:0e:94:1c:
+                    1e:95:6c:94:b6:ca:b1:da:af:6c:2a:86:77:6e:b6:
+                    3f:5b:68:8a:6e:d5:15:66:c4:49:f5:a9:6f:51:0d:
+                    5f:bb:95:a9:b1
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        Attributes:
+            a0:00
+    Signature Algorithm: ecdsa-with-SHA256
+         30:45:02:20:26:8f:f0:a2:d8:4e:43:f9:54:ae:48:71:f7:bd:
+         ca:eb:02:36:05:d5:df:48:70:da:06:66:6c:09:13:be:0b:4a:
+         02:21:00:90:ad:31:6a:94:fe:87:6e:64:f3:da:f7:57:65:33:
+         60:7c:fd:b0:37:d7:43:82:b0:78:2f:7b:e3:a7:16:79:75
+</code></pre>
+
+<p>인증서 발행</p>
+
+<pre><code class="language-txt">$ openssl ca -config CA/example.cnf -days 2 -in demo_20190122.csr.pem -out demo_20190122.cert.pem
+Using configuration from CA/iotca.cnf
+Enter pass phrase for /home/whatever/CA/private/ci_intermediate_test.key.pem:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 4116 (0x1014)
+        Validity
+            Not Before: Jan 22 04:12:53 2019 GMT
+            Not After : Jan 24 04:12:53 2019 GMT
+        Subject:
+            countryName               = KR
+            organizationName          = Example Company
+            organizationalUnitName    = Your Group
+            commonName                = test.example.com
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Comment:
+                IOTCloud Certificate
+            X509v3 Subject Key Identifier:
+                B1:74:9F:34:3E:E4:17:XX:XX:XX:8F:92:C8:55:44:26:CD:XX:XX:XX
+            X509v3 Authority Key Identifier:
+                DirName:/CN=Example Root CA TEST/OU=Example Root CA/O=Example/C=KR
+                serial:67:3E:09:57:17:A3:03:01:91:9F:2B:37:5B:9F:81:15:87:XX:XX:XX
+
+            X509v3 Subject Alternative Name:
+                DNS:*.example.com    ## override 됨 !
+            Netscape CA Revocation Url:
+                http://ca.example.com/crl
+            Authority Information Access:
+                OCSP - URI:http://ocsp.example.com
+
+Certificate is to be certified until Jan 24 04:12:53 2019 GMT (2 days)
+Sign the certificate? [y/n]:y
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+</code></pre>
+
+<p>p12 keystore 생성</p>
+
+<pre><code class="language-txt">$ openssl pkcs12 -export -inkey demo_20190122.key.pem -in demo_20190122.cert.pem -certfile chainRoot.pem -out demo_20190122.p12
+Enter Export Password:
+Verifying - Enter Export Password:
+</code></pre>
+
+<p>java keystore 생성</p>
+
+<pre><code class="language-txt">$ keytool -importkeystore -srckeystore demo_20190122.p12 -srcstoretype PKCS12 -destkeystore demo_20190122.jks
+Importing keystore demo_20190122.p12 to demo_20190122.jks...
+Enter destination keystore password:
+Re-enter new password:
+Enter source keystore password:
+Entry for alias 1 successfully imported.
+Import command completed:  1 entries successfully imported, 0 entries failed or cancelled
+
+Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using &quot;keytool -importkeystore -srckeystore demo_20190122.jks -destkeystore demo_20190122.jks -deststoretype pkcs12&quot;.
+</code></pre>
+
+<h2 id="tls-handshake-과정-리뷰">TLS handshake 과정 리뷰</h2>
+
+<p>Handshake 과정 설명</p>
+
+<ul>
+<li><a href="https://tls.ulfheim.net/">The Illustrated TLS Connection TLS1.2</a></li>
+<li><a href="https://tls13.ulfheim.net/">The Illustrated TLS Connection TLS1.3</a></li>
+</ul>
+
+<h3 id="tls-handshake-과정에서-server-certificate-verfication-과정">TLS handshake 과정에서 Server Certificate Verfication 과정</h3>
+
+<h3 id="certificate-chain-verification">Certificate Chain verification</h3>
+
+<ul>
+<li><a href="https://github.com/openjdk-mirror/jdk7u-jdk/blob/master/src/share/classes/sun/security/ssl/ClientHandshaker.java">ClientHandshaker.java</a></li>
+<li>-&gt; ((X509ExtendedTrustManager)tm).checkServerTrusted(peerCerts.clone(),keyExchangeString,engine);</li>
+<li>-&gt; <a href="https://github.com/openjdk-mirror/jdk7u-jdk/blob/master/src/share/classes/sun/security/validator/PKIXValidator.java">PKIXValidator.java</a></li>
+<li>-&gt; sun.security.provider.certpath.PKIXCertPathValidator.java</li>
+<li>-&gt; sun.security.provider.certpath.SunCertPathBuilder
+
+<ul>
+<li>Issuer의 pubkey로 Subject 의 Signagure 검증</li>
+<li>Leaf 의 signature를 inter1 의 pubkey로 확인</li>
+<li>inter1 의 signature를 inter2 의 pubkey로 확인</li>
+<li>inter2 의 signature를 root의 pubkey로 확인</li>
+<li>인증서가 trustedCA에 있는지 확인</li>
+<li>Trusted CA cert가 서버에서 내려왔으면 일치하는 인증서가 trusted CA에 있는지 확인</li>
+<li>Trusted CA cert가 서버에서 내려오지 않는 경우는 마지막 인증서의 issuer가 CA에 있는지 확인</li>
+<li>그리고</li>
+<li>AlgorithmChecker.java, 예. (inter)CA KeyUsage.digitalSignature 가 없으면 signature 검증 불가.</li>
+<li>BasicChecker.java, 여기서 Signature, Time Validity 확인</li>
+<li>ConstraintsChecker.java, basicConstraints 에서 pathLen 확인</li>
+<li>CrlRevocationChecker.java, CRL revoke 확인</li>
+<li>KeyChecker.java, KeyUsage 확인</li>
+<li>OCSPChecker.java, OCSP 확인</li>
+<li>PolicyChecker.java</li>
+<li>UntrustedChecker.java, blacklist 확인</li>
+</ul></li>
+</ul>
+
+<p>참고 java의 trusted CA list 확인</p>
+
+<pre><code class="language-txt">$ keytool -list -keystore /etc/ssl/certs/java/cacerts | head -20
+Enter keystore password:  changeit
+Keystore type: jks
+Keystore provider: SUN
+
+Your keystore contains 175 entries
+
+debian:staat_der_nederlanden_root_ca_-_g3.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): D8:EB:6B:41:51:92:59:E0:F3:E7:85:00:C0:3D:B6:88:97:C9:EE:FC
+debian:pscprocert.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): 70:C1:8D:74:B4:28:81:0A:E4:FD:A5:75:D7:01:9F:99:B0:3D:50:74
+debian:chambers_of_commerce_root_-_2008.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): 78:6A:74:AC:76:AB:14:7F:9C:6A:30:50:BA:9E:A8:7E:FE:9A:CE:3C
+debian:ca_disig_root_r2.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): B5:61:EB:EA:A4:DE:E4:25:4B:69:1A:98:A5:57:47:C2:34:C7:D9:71
+debian:affirmtrust_premium.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): D8:A6:33:2C:E0:03:6F:B1:85:F6:63:4F:7D:6A:06:65:26:32:28:27
+debian:juur-sk.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): 40:9D:4B:D9:17:B5:5C:27:B6:9B:64:CB:98:22:44:0D:CD:09:B8:89
+debian:ebg_elektronik_sertifika_hizmet_sağlayıcısı.pem, Oct 24, 2017, trustedCertEntry,
+Certificate fingerprint (SHA1): 8C:96:BA:EB:DD:2B:07:07:48:EE:30:32:66:A0:F3:98:6E:7C:AE:58
+debian:geotrust_universal_ca_2.pem, Oct 24, 2017, trustedCertEntry,
+</code></pre>
+
+<p>ubuntu 의 trusted ca list</p>
+
+<pre><code class="language-txt">$ ls -al /etc/ssl/certs/ca-certificates.crt
+-rw-r--r-- 1 root root 275721 Oct 24  2017 /etc/ssl/certs/ca-certificates.crt
+
+$ head -100 /etc/ssl/certs/ca-certificates.crt
+-----BEGIN CERTIFICATE-----
+MIIH0zCCBbugAwIBAgIIXsO3pkN/pOAwDQYJKoZIhvcNAQEFBQAwQjESMBAGA1UE
+AwwJQUNDVlJBSVoxMRAwDgYDVQQLDAdQS0lBQ0NWMQ0wCwYDVQQKDARBQ0NWMQsw
+....
+h1xA2syVP1XgNce4hL60Xc16gwFy7ofmXx2utYXGJt/mwZrpHgJHnyqobalbz+xF
+d3+YJ5oyXSrjhO7FmGYvliAd3djDJ9ew+f7Zfc3Qn48LFFhRny+Lwzgt3uiP1o2H
+pPVWQxaZLPSkVrQ0uGE3ycJYgBugl6H8WY3pEfbRD0tVNEYqi4Y7
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIFtTCCA52gAwIBAgIIYY3HhjsBggUwDQYJKoZIhvcNAQEFBQAwRDEWMBQGA1UE
+AwwNQUNFRElDT00gUm9vdDEMMAoGA1UECwwDUEtJMQ8wDQYDVQQKDAZFRElDT00x
+....
+</code></pre>
+
+<h3 id="host-name-verification">Host name verification</h3>
+
+<p>sun.net.www.protocol.https.HttpsClient.java -&gt; public void afterConnect()
+ -&gt; sun.security.util.HostnameChecker.java -&gt; matchDNS(String expectedName, X509Certificate cert)</p>
+
+<ul>
+<li>subjAltNames = cert.getSubjectAlternativeNames() 과 비교(wildcard match)</li>
+<li>subjectName.findMostSpecificAttribute(X500Name.commonName_oid) 과 비교(wildcard match)</li>
+</ul>
+
+<h3 id="revoke-check-ocsp">Revoke check - OCSP</h3>
+
+<pre><code class="language-txt">## Thawte OCSP 엉망임.
+$ openssl ocsp -issuer inter1.pem -cert leaf.cert -text -url http://status.thawte.com
+OCSP Request Data:
+    Version: 1 (0x0)
+    Requestor List:
+        Certificate ID:
+          Hash Algorithm: sha1
+          Issuer Name Hash: 777A7BA877D6F10F1CE9202196FB6B1A6E37F5ED
+          Issuer Key Hash: A58CFE32CCEB0F2CD419C608B80024885DC3C5B7
+          Serial Number: 0686052917476546DB0B6C1462EAFE04
+    Request Extensions:
+        OCSP Nonce:
+            0410A16C63FD4008BAA7272CF761CD3BD9DB
+OCSP Response Data:
+    OCSP Response Status: successful (0x0)
+    Response Type: Basic OCSP Response
+    Version: 1 (0x0)
+    Responder Id: 9058FFB09C75A8515477B1EDF2A34316389E6CC5
+    Produced At: Jan 21 15:32:58 2019 GMT
+    Responses:
+    Certificate ID:
+      Hash Algorithm: sha1
+      Issuer Name Hash: 777A7BA877D6F10F1CE9202196FB6B1A6E37F5ED
+      Issuer Key Hash: 9058FFB09C75A8515477B1EDF2A34316389E6CC5
+      Serial Number: 0686052917476546DB0B6C1462EAFE04
+    Cert Status: good
+    This Update: Jan 21 15:32:58 2019 GMT
+    Next Update: Jan 28 14:47:58 2019 GMT
+
+    Signature Algorithm: sha256WithRSAEncryption
+         06:5b:9c:c8:d2:20:21:0a:75:3f:3d:f7:44:74:37:bf:c1:cd:
+         d2:44:8d:0e:69:de:0e:fa:0d:e2:57:eb:e4:42:fc:17:b3:69:
+         28:2e:ef:20:91:d0:de:87:3d:50:fa:3a:4b:e4:bf:13:d4:f6:
+         94:b3:a1:af:00:79:17:2a:c6:1c:21:77:aa:ac:11:8a:63:a1:
+         fb:39:9b:5c:5b:00:ce:18:52:c6:3d:18:bd:25:9d:ec:cf:71:
+         06:77:2c:05:da:93:24:1d:5a:34:72:bd:23:e3:92:88:ad:b4:
+         dd:8c:fc:f4:09:5b:f2:d1:b5:45:57:6c:7d:74:34:24:5c:95:
+         9f:1b:88:db:65:ea:d1:8a:a4:f0:b7:1d:dc:2c:ea:13:35:51:
+         52:af:ba:85:5e:f4:a4:ee:90:ed:55:d8:f1:51:57:a4:1a:eb:
+         db:a5:8d:a8:03:e7:83:f9:53:0d:31:74:75:a6:2e:80:47:bf:
+         50:01:f0:ad:ea:ff:c2:17:95:18:b9:aa:1e:01:f5:5f:3c:3e:
+         ef:e5:7b:0c:31:54:5e:9f:62:19:a4:00:ee:26:2f:d8:ce:5b:
+         90:93:39:69:95:61:90:a4:0b:70:71:66:04:c3:b4:31:d8:81:
+         6a:ab:fd:a7:6d:65:a1:5c:54:57:89:d5:ff:91:ef:e5:ef:8c:
+         33:3b:0f:00
+WARNING: no nonce in response
+Response Verify Failure
+139676688847296:error:27069076:OCSP routines:OCSP_basic_verify:signer certificate not found:../crypto/ocsp/ocsp_vfy.c:41:
+139676688847296:error:27069076:OCSP routines:OCSP_basic_verify:signer certificate not found:../crypto/ocsp/ocsp_vfy.c:41:
+
+## intermediate CA1 를 intermediate CA2 로 확인
+$ openssl ocsp -issuer inter2.pem -cert inter1.pem -text -url http://ocsp.digicert.com
+OCSP Request Data:
+    Version: 1 (0x0)
+    Requestor List:
+        Certificate ID:
+          Hash Algorithm: sha1
+          Issuer Name Hash: 39D28B71FE1D19B65FB3F1288F23BC04595C4395
+          Issuer Key Hash: 4E2254201895E6E36EE60FFAFAB912ED06178F39
+          Serial Number: 090EE8C5DE5BFA62D2AE2FF7097C4857
+    Request Extensions:
+        OCSP Nonce:
+            04108A721C3BAF8F893F70D81572FCAD1E15
+OCSP Response Data:
+    OCSP Response Status: successful (0x0)
+    Response Type: Basic OCSP Response
+    Version: 1 (0x0)
+    Responder Id: 4E2254201895E6E36EE60FFAFAB912ED06178F39
+    Produced At: Jan 19 21:27:44 2019 GMT
+    Responses:
+    Certificate ID:
+      Hash Algorithm: sha1
+      Issuer Name Hash: 39D28B71FE1D19B65FB3F1288F23BC04595C4395
+      Issuer Key Hash: 4E2254201895E6E36EE60FFAFAB912ED06178F39
+      Serial Number: 090EE8C5DE5BFA62D2AE2FF7097C4857
+    Cert Status: good
+    This Update: Jan 19 21:27:44 2019 GMT
+    Next Update: Jan 26 21:27:44 2019 GMT
+
+    Signature Algorithm: sha256WithRSAEncryption
+         28:bc:4f:39:7b:ab:27:3e:c5:33:e8:5a:70:0f:ab:a7:e0:13:
+         51:d4:7f:23:78:21:92:af:f3:00:2b:b9:e8:79:84:8e:3e:a4:
+         4d:92:44:f6:89:35:7b:0e:89:71:67:f7:d0:76:27:e7:53:da:
+         c3:b2:88:50:5f:7e:1b:66:55:ee:0a:37:91:d3:03:16:35:49:
+         9f:18:14:31:0a:b5:26:79:d6:ee:7f:00:92:6a:c2:a3:ec:b0:
+         11:d3:4c:32:b4:bd:b6:30:70:44:f0:cc:86:3d:53:b3:cd:f4:
+         ec:ef:0a:01:33:5c:cf:2f:e5:b1:f3:2c:c7:d5:a4:1a:d6:b2:
+         65:ad:cc:1c:f0:62:c6:e8:aa:46:e9:01:ec:a2:af:f7:6d:ad:
+         bc:f5:d5:6d:eb:b8:54:53:83:37:dd:79:0e:77:86:64:98:44:
+         80:c5:d9:c2:7e:7e:4c:7d:d3:40:34:2c:69:df:48:1a:3f:13:
+         91:01:68:fc:7c:a7:d1:b2:6b:df:f5:cb:ee:94:6d:b2:60:fb:
+         69:d1:90:72:b0:32:24:13:c4:82:1e:12:40:6e:e0:23:5f:d2:
+         c8:97:7b:db:c0:ec:5a:0d:33:f6:b3:06:2e:35:d3:c0:2e:ef:
+         a2:38:fc:5a:54:3f:32:1b:12:22:22:52:e8:4e:0e:63:49:17:
+         93:20:33:df
+WARNING: no nonce in response
+Response verify OK
+inter1.pem: good
+        This Update: Jan 19 21:27:44 2019 GMT
+        Next Update: Jan 26 21:27:44 2019 GMT
+</code></pre>
+
+<h3 id="revoke-check-crl">Revoke check - CRL</h3>
+
+<pre><code class="language-txt">$ wget http://cdp.thawte.com/ThawteTLSRSACAG1.crl
+
+$ ls -lah ThawteTLSRSACAG1.crl
+-rw-rw-rw- 1 khpark khpark 59K Jan 21 03:15 ThawteTLSRSACAG1.crl
+
+$ openssl crl -inform DER -in ThawteTLSRSACAG1.crl -noout -text | head -30
+Certificate Revocation List (CRL):
+        Version 2 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=Thawte TLS RSA CA G1
+        Last Update: Jan 20 17:52:57 2019 GMT
+        Next Update: Jan 27 17:52:57 2019 GMT
+        CRL extensions:
+            X509v3 Authority Key Identifier:
+                keyid:A5:8C:FE:32:CC:EB:0F:2C:D4:19:C6:08:B8:00:24:88:5D:C3:C5:B7
+
+            X509v3 CRL Number:
+                429
+Revoked Certificates:
+    Serial Number: 0C3281BF24004C92997EE9869C79E407
+        Revocation Date: Dec  1 20:25:47 2017 GMT
+    Serial Number: 0A3A386DB20BC3F44E7A0F2E842985C4
+        Revocation Date: Dec  2 01:25:00 2017 GMT
+    Serial Number: 07C7EA509C8E9CCE86F8BDA5CFFF34D5
+        Revocation Date: Dec  4 16:18:53 2017 GMT
+    Serial Number: 054EA313DC378B673E909CF58FA0B97C
+        Revocation Date: Dec  5 09:48:42 2017 GMT
+    Serial Number: 018850628DBB98939472275C876BA89D
+        Revocation Date: Dec  5 13:32:05 2017 GMT
+    Serial Number: 0560F1FD5D2C9B07868ED9ECC604D809
+        Revocation Date: Dec  5 15:40:12 2017 GMT
+    Serial Number: 0DF9B2A88C486C103F0985139C68EC57
+        Revocation Date: Dec  6 10:31:53 2017 GMT
+    Serial Number: 075046831DF6C297579D5EBAD51D0A76
+        Revocation Date: Dec  6 11:20:21 2017 GMT
+    Serial Number: 02B368345543BA2968CE82D56AD09934
+
+
+$ openssl crl -inform DER -in ThawteTLSRSACAG1.crl -noout -text &gt; crl.txt
+$ echo &quot;0f:b2:7e:c6:f4:b3:be:14:31:4f:fa:81:9d:91:1b:76&quot; | tr -d : | tr [:lower:] [:upper:]
+0FB27EC6F4B3BE14314FFA819D911B76  // leaf cert serial
+$ grep &quot;0FB27EC6F4B3BE14314FFA819D911B76&quot; crl.txt
+$
+</code></pre>
+
+<h3 id="certificate-transparency-policy">Certificate Transparency Policy</h3>
+
+<ul>
+<li>내용: <a href="https://www.certificate-transparency.org/">https://www.certificate-transparency.org/</a></li>
+<li>확인
+
+<ul>
+<li><a href="https://www.ssllabs.com/ssltest/analyze.html?d=stg%2dus%2dauth2.samsungosp.com&amp;latest">https://www.ssllabs.com/ssltest/analyze.html?d=stg%2dus%2dauth2.samsungosp.com&amp;latest</a></li>
+<li><a href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a></li>
+<li>x.509 의 CT Precertificate SCTs extention</li>
+</ul></li>
+<li>Apple 이 <strong>iOS 12.1.1 부터 iOS/MAC 에서 Certificate Transparency policy 적용</strong>
+
+<ul>
+<li>나머지 다 valid 해도 October 15, 2018이후 발행인증서는 Apple&rsquo;s policy requires at least two Signed Certificate Timestamps (SCT) issued from a CT log</li>
+<li><a href="https://support.apple.com/en-us/HT205280">https://support.apple.com/en-us/HT205280</a></li>
+</ul></li>
+</ul>
+
+<h3 id="부록-sni">부록. SNI</h3>
+
+<p>Client Hello 에서 SNI(Server Name Indicator) 정보도 함께 전달됨.
+SNI는 Encrypt되지 않아 CDN등에서 Client Hello 받고 그에 해당되는 서버 인증서로 handshake 진행할 수 있음.
+(IP를 공용으로 사용할 수 있어 CDN 입장에서는 비용 절감가능)</p>
+
+<p>그런데</p>
+
+<ul>
+<li>Client 따라 지원안하는 Client도 있음. 대표적인게 Samsung Account. 그래서 Lime network CDN에서 초기 SNI 방식으로 제공하다 지금은 전용 서버를 제공하고 있음</li>
+<li>SNI는 암호와 안되어 있어 Big Brother 가 모니터링 가능. https 로 접속했어도 어디로 접속하는지 파악가능
+
+<ul>
+<li>그래서 TLS 1.3 부터는 SNI도 Encryption 하고 있음. <a href="https://blog.cloudflare.com/encrypted-sni/">CloudFlare Encrypted SNI 소개</a></li>
+<li>SNI 를 Encryption하기 위해 Server의 public key는 DNS 통해 배포</li>
+<li>DNS도 평문으로 오고가니 DNS over TLS, DNSSEC 사용도 한 트렌드.</li>
+</ul></li>
+</ul>
+
+
+        
+
+        
+            <hr/>
+            <section id="social-share">
+              <div class="list-inline footer-links">
+                
+
+<div class="share-box" aria-hidden="true">
+    <ul class="share">
+      
+      <li>
+        <a href="//twitter.com/share?url=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f&amp;text=%ec%9d%b8%ec%a6%9d%ec%84%9c%20%eb%b0%9c%ed%96%89%20%ea%b4%80%eb%a6%ac%20%ea%b4%80%eb%a0%a8%20%ec%a7%80%ec%8b%9d%20%ec%a0%95%eb%a6%ac&amp;via=yonginscv" target="_blank" title="Share on Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//plus.google.com/share?url=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f" target="_blank" title="Share on Google Plus">
+          <i class="fab fa-google-plus"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f" target="_blank" title="Share on Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//reddit.com/submit?url=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f&amp;title=%ec%9d%b8%ec%a6%9d%ec%84%9c%20%eb%b0%9c%ed%96%89%20%ea%b4%80%eb%a6%ac%20%ea%b4%80%eb%a0%a8%20%ec%a7%80%ec%8b%9d%20%ec%a0%95%eb%a6%ac" target="_blank" title="Share on Reddit">
+          <i class="fab fa-reddit"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f&amp;title=%ec%9d%b8%ec%a6%9d%ec%84%9c%20%eb%b0%9c%ed%96%89%20%ea%b4%80%eb%a6%ac%20%ea%b4%80%eb%a0%a8%20%ec%a7%80%ec%8b%9d%20%ec%a0%95%eb%a6%ac" target="_blank" title="Share on LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f&amp;title=%ec%9d%b8%ec%a6%9d%ec%84%9c%20%eb%b0%9c%ed%96%89%20%ea%b4%80%eb%a6%ac%20%ea%b4%80%eb%a0%a8%20%ec%a7%80%ec%8b%9d%20%ec%a0%95%eb%a6%ac" target="_blank" title="Share on StumbleUpon">
+          <i class="fab fa-stumbleupon"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyonginscv.github.io%2fposts%2fcertificate%2f&amp;description=%ec%9d%b8%ec%a6%9d%ec%84%9c%20%eb%b0%9c%ed%96%89%20%ea%b4%80%eb%a6%ac%20%ea%b4%80%eb%a0%a8%20%ec%a7%80%ec%8b%9d%20%ec%a0%95%eb%a6%ac" target="_blank" title="Share on Pinterest">
+          <i class="fab fa-pinterest"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+              </div>
+            </section>
+        
+
+        
+          
+          
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://yonginscv.github.io/posts/effectivetoubleshooting/" data-toggle="tooltip" data-placement="top" title="Effective Toubleshooting">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://yonginscv.github.io/posts/outstandingsec/" data-toggle="tooltip" data-placement="top" title="초격차">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://twitter.com/yonginscv" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            <a href="" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://yonginscv.github.io">Yong-in SCV</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://yonginscv.github.io">용인 SCV</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.55.6</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://yonginscv.github.io/js/main.js"></script>
+<script src="https://yonginscv.github.io/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://yonginscv.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
+
