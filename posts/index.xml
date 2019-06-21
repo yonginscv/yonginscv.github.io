@@ -6,10 +6,22 @@
     <description>Recent content in Posts on 용인 SCV</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Jun 2019 17:10:27 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 20 Jun 2019 01:24:37 +0900</lastBuildDate>
     
 	<atom:link href="https://yonginscv.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>명언들</title>
+      <link>https://yonginscv.github.io/posts/goodquotes/</link>
+      <pubDate>Thu, 20 Jun 2019 01:24:37 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/goodquotes/</guid>
+      <description>상처에 의해 정신이 성장하고 새 힘이 솟는다. &amp;ndash; 니체. 우상의 황혼
+나를 죽이지 못한 고통은, 나를 더 강하게 만든다. &amp;ndash; 니체. 우상의 황혼
+지금 우리가 사는 모습이 사람들이 살 수 있는 유일한 방식이라고 여기는 게으르고 소심한 습관으로부터 자신, 더 나아가 독자의 정신을 해방시키기 위해 과학소설을 썼다. &amp;ndash; 어슐러 K. 르귄. HBR 2019&amp;frasl;01
+우리 사회는 낙관론자와 비관론자를 모두 필요로 한다. 낙관론자가 비행기를 발명하면 비관론자는 낙하산을 발명한다. &amp;ndash; 버나드 쇼.</description>
+    </item>
     
     <item>
       <title>창의성과 술</title>
@@ -20,6 +32,19 @@
       <description>혈중 알콜농도 0.03~0.075에서 창의력 상승 하버드 비지니스리뷰 2018년 5~6월 호의 술을 마시면 문제를 더 창의적으로 풀 수 있다의 내용입니다.
  미시시피주립대의 앤드루 자로스(Andrew Jarsoz) 교수팀이 남성 20명에게 보드카 크랜베리 칵테일을 마시게 한 후 원격연상단어검사 (RAT, Remote Assiciates Test) 문제 15개를 풀게했더니 문제당 1분 빠르게, 전체적으로 2~3문제를 더 풀어냈습니다.
  알콜 농도:  혈중알콜농도를 0.075까지, 보드카와 크랜베리 주스를 1대 3으로 3잔, 몸무게나 많이 나가는 사람은 더 큰컵으로 후속 연구팀이 맥주로 0.</description>
+    </item>
+    
+    <item>
+      <title>SW 개발관련 법칙들</title>
+      <link>https://yonginscv.github.io/posts/swdev_rules/</link>
+      <pubDate>Sat, 15 Jun 2019 12:52:10 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/swdev_rules/</guid>
+      <description>해커뉴스에서 hacker-law / hacker-law-kr 글을 보고나니 링크 글에서는 빠진 몇까지 더 생각나는 법칙들이 있어 정리해봅니다.
+콘웨이의 법칙 멜빈 콘웨이(1934년생, 2019년 현재 85세, 헤비 (트위터)https://twitter.com/conways_law)가 1967년 Datamation magazine 잡지에 기고한 내용으로, 소프트웨어 구조는 그 조직의 구조에 영향을 받는다는 자연계 절대법칙입니다.
+ organizations which design systems &amp;hellip; are constrained to produce designs which are copies of the communication structures of these organizations.
+Conway&amp;rsquo;s law - Wikipedia
+ 실제 설계를 하다보면 자연스럽게 개발할 사람 생각하게되고 그래서 소프트웨서 구조가 조직 구조에 영향을 받게되는 경우가 많았던 것 같습니다.</description>
     </item>
     
     <item>

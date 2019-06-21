@@ -1,8 +1,9 @@
 /* --- General --- */
 @import url('https://fonts.googleapis.com/css?family=Nanum+Myeongjo:400');
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400');
 
 body {
-  font-family: 'Nanum Myeongjo', 'Lora', 'Times New Roman', serif;
+  font-family: 'Nanum Gothic', 'Lora', 'Times New Roman', serif;
   font-size: 18px;
   color: #404040;
   position: relative;
@@ -37,6 +38,7 @@ p a {
 h1,h2,h3,h4,h5,h6 {
   font-family: 'Nanum Myeongjo','Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 800;
+  margin: 50px 0 20px 0px;
 }
 a {
   color: #008AFF;
