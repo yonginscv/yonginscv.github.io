@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 용인 SCV</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 30 Jun 2019 03:38:59 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jul 2019 03:16:07 +0900</lastBuildDate>
     
 	<atom:link href="https://yonginscv.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>In My Pocket - 2019/07/07</title>
+      <link>https://yonginscv.github.io/posts/inmypocket_20190707/</link>
+      <pubDate>Fri, 05 Jul 2019 03:16:07 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/inmypocket_20190707/</guid>
+      <description>Google’s new reCAPTCHA has a dark side  reCaptcha v3에 google cookie 가 판단기준에 사용되는 것 같고 google 계정 로그인 한 경우 lower risk score, Tor or VPN - higher score 나온다고. (higher &amp;ndash; 사람, lower &amp;ndash; 기계) reCaptcha v3 의 경우 login 뿐만 아니라 전 페이지에 google js 넣기를 권고하고 있어 구글이 더 많은 개인정보를 수집할 수 있다는 우려 수집되는 정보에는 hardware and software information 둘다 포함. 기사가 링크가 논문에는 recaptcha v3가 mouse 움직임을 로봇 여부 판단 기준에 사용하는 것 같다고 함.</description>
+    </item>
     
     <item>
       <title>In My Pocket - 2019/06/30</title>
@@ -17,8 +26,7 @@
       <pubDate>Sun, 30 Jun 2019 03:38:59 +0900</pubDate>
       
       <guid>https://yonginscv.github.io/posts/inmypocket_20190630/</guid>
-      <description>업데이트 중
-DevOps Enterprise Summit 2019 slides DevOps Enterprise Summit 2019의 발표자료가 공개. 흥미로운 부분 캡쳐
+      <description>DevOps Enterprise Summit 2019 slides DevOps Enterprise Summit 2019의 발표자료가 공개. 흥미로운 부분 캡쳐
  출처: https://speakerdeck.com/tastapod/microservices-software-that-fits-in-your-head?slide=62 Start with monolith 냐 Dont&amp;rsquo;t start with a monilith 혹은 &amp;ldquo;Monilith 도 못만들면서 무슨 마이크로서비스냐&amp;rdquo; 가 문제가 아니고 replacable architecture 가 중하다   출처: DevOps Enterprise Summit 2019 slides -&amp;gt; Pais, Manual, Skelton, Matthew, Monoliths vs Microservices is Missing the Point—Start with Team Cognitive Load.pdf   출처: DevOps Enterprise Summit 2019 slides -&amp;gt; Franzén, Daniel, Elmqvist, Jonas, Digital Business Development using the FINIKS Framework.</description>
     </item>
     
