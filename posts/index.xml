@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 용인 SCV</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 05 Jul 2019 03:16:07 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2020 17:44:31 +0900</lastBuildDate>
     
 	<atom:link href="https://yonginscv.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Jitsi Single Instance Setup How to</title>
+      <link>https://yonginscv.github.io/posts/jitsi-setup/</link>
+      <pubDate>Sun, 19 Apr 2020 17:44:31 +0900</pubDate>
+      
+      <guid>https://yonginscv.github.io/posts/jitsi-setup/</guid>
+      <description>Ref  DigitalOcean&amp;rsquo;s Jitsi Install guide Jitsi Official Install guide  Steps  위 Digital Ocean&amp;rsquo;s Guide에 Jitsi Official guide의 NAT관련 설정을 더 해주면 됨. Jitsi 는 기본 설치하면 &amp;ldquo;인증&amp;rdquo;이 아무것도 없음. 누구나 들어와서 화상 회의를 개설 할 수 있음. 그런데 위 Digital Ocean&amp;rsquo;s guide는 기존 인증을 세팅하도록 가이드하고 있어 좋음 Linux Mem 1G 이상은 필요한듯 (512MB 사용 시 video bridge OOM남) public domain 이 있어야 편함. https 인증서는 jitji script 이용하면 let&amp;rsquo;s encrypt 로 부터 받음.</description>
+    </item>
     
     <item>
       <title>In My Pocket - 2019/07/07</title>
